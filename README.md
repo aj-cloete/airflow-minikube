@@ -1,2 +1,2 @@
-# airflow-kubernetes
-Airflow natively on kubernetes (services and executors)
+# airflow-minikube
+Airflow natively on minikube (services and executors)
