@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+apache-airflow = {version = "==1.10.3", extras = ["aws,crypto,kubernetes,postgres,slack"]}
 
 [dev-packages]
 
