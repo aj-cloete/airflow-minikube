@@ -1,0 +1,12 @@
+description: Airflow running on KubernetesExecutor
+name: airflow
+version: 0.0.1
+appVersion: 1.10.3
+icon: https://airflow.apache.org/_images/pin_large.png
+home: https://airflow.apache.org/
+maintainers:
+  - name: AJ Cloete
+    email: ajcloete@gmail.com
+keywords:
+  - airflow
+  - minikube
