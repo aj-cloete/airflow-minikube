@@ -1,3 +1,5 @@
 .env
 Pipfile
 Pipfile.lock
+airflow/charts
+airflow/charts/*
