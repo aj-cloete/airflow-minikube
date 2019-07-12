@@ -21,6 +21,10 @@ RUN set -x \
         libssl-dev \
         libpq-dev \
         python-dev \
+        inetutils-telnet \
+        bind9utils \
+        default-libmysqlclient-dev \
+        gcc \
     ' \
     && apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
@@ -29,21 +33,34 @@ RUN set -x \
         nano \
         curl \
         git \
-        inetutils-telnet \
-        bind9utils \
         zip \
         unzip \
-        gcc 
+    && rm -rf /var/lib/apt/lists/*
 
-# Pip install section
-RUN pip install --upgrade pip \
-    && pip install -U setuptools \
-        kubernetes \
-        "jinja2<=2.10.0,>=2.7.3" \
-        "werkzeug<0.15.0,>=0.14.1" \
-        "psycopg2-binary>=2.7.4" \
-        "flask>=1.0, <1.1" \
-        apache-airflow[crypto${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
+# Airflow installation
+RUN airflowDeps='crypto,\
+emr,\
+hive,\
+kubernetes,\
+mysql,\
+s3,\
+salesforce,\
+segment,\
+slack,\
+ssh'\
+    && pip install -U pip setuptools wheel \
+    && pip install \
+        "flask>=1.0,<1.1" \
+        "boto3" \
+        "zdesk" \
+    && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
+    && pip install apache-airflow[$airflowDeps${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
+
+# Check for requirements file and install if exists
+COPY . /buildcontext/.
+RUN if [ -f /buildcontext/requirements.txt ]; \
+    then pip install -r /buildcontext/requirements.txt; fi \
+    && rm -rf /buildcontext \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
@@ -53,15 +70,12 @@ RUN pip install --upgrade pip \
         /var/tmp/* \
         /usr/share/man \
         /usr/share/doc \
-        /usr/share/doc-base
+        /usr/share/doc-base  
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-# COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+# COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-EXPOSE 8080
+ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 
 WORKDIR ${AIRFLOW_HOME}
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["webserver"]
 
+CMD [ "bash" ]

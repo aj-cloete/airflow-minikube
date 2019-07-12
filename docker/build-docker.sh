@@ -10,6 +10,6 @@ if [ $? -eq 0 ]; then
 fi
 
 # To add dependencies, build like so:
-# docker build --build-arg PYTHON_DEPS="Flask-OAuthlib" --build-arg AIRFLOW_DEPS="kubernetes" --tag=${IMAGE}:${TAG} .
+# docker build --build-arg PYTHON_DEPS="Flask-OAuthlib psycopg2-binary" --build-arg AIRFLOW_DEPS="kubernetes,snowflake" --tag=${IMAGE}:${TAG} .
+# For extra pip settings, add requirements.txt file to the docker folder
 docker build --tag=${IMAGE}:${TAG} .
-
