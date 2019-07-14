@@ -20,7 +20,7 @@ helm dependency update $BASEDIR/../airflow
 
 if [[ ! $(docker images | grep airflow) ]]; then
   cd $BASEDIR/../docker
-  ./build_docker-image.sh
+  ./airflow-docker-build.sh
   cd $BASEDIR
 fi
 
