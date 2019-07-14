@@ -10,12 +10,17 @@ if [[ ! $(which helm) ]]; then
   curl -LO https://git.io/get_helm.sh
   chmod 700 get_helm.sh
   ./get_helm.sh
+  helm init --service-account tiller --upgrade
   rm get_helm.sh
 fi
 
 # Apply the tiller service account on the minikube cluster
 kubectl apply -f $BASEDIR/../airflow/tiller.yaml
-helm init --service-account tiller --upgrade
 helm dependency update $BASEDIR/../airflow
+
+if [[ ! $(docker images | grep airflow) ]]; then
+  $BASEDIR/../docker/build_docker.sh;
+fi
+
 helm upgrade --install airflow $BASEDIR/../airflow/. --namespace=airflow
 kubectl config set-context --current --namespace=airflow
