@@ -7,7 +7,7 @@ BASEDIR=$(dirname "$0")
 
 if [[ ! $(which helm) ]]; then
   echo Installing helm which is required for deploying to kubernetes
-  curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+  curl -LsS "https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get" -o get_helm.sh  
   chmod +x get_helm.sh
   sudo sh get_helm.sh
   sudo rm get_helm.sh
