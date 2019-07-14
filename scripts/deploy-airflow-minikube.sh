@@ -3,7 +3,7 @@
 BASEDIR=$(dirname "$0")
 
 # Start the minikube cluster
-/bin/bash $BASEDIR/minikube-start.sh;
+/bin/bash $BASEDIR/start_minikube.sh;
 
 # Apply the tiller service account on the minikube cluster
 kubectl apply -f $BASEDIR/../airflow/tiller.yaml

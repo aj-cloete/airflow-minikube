@@ -21,6 +21,13 @@
 
 set -ex
 
+if [[ -x /usr/local/bin/minikube ]]; then
+  echo Minikube already installed
+  if [[ $(minikube status | grep "Correctly Configured") ]]; then
+    echo Minikube already up and running!
+  fi
+fi
+
 _MY_SCRIPT="${BASH_SOURCE[0]}"
 _MY_DIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
 _KUBERNETES_VERSION="${KUBERNETES_VERSION:-$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)}"
