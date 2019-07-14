@@ -81,6 +81,7 @@ if [[ ! $(which docker) ]]; then
   cd $_MY_DIR/bin
   curl -fsSl https://get.docker.com -Lo get-docker.sh
   sudo sh get-docker.sh
+  sudo usermod -aG docker $USER || :
   cd $_MY_DIR
 fi
 
