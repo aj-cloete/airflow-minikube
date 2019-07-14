@@ -132,6 +132,8 @@ spec:
         ports:
         - name: webserver
           containerPort: 8080
+        command:
+          - "airflow"
         args: ["webserver"]
         envFrom:
           - secretRef:

@@ -58,6 +58,8 @@ spec:
       - name: scheduler
         image: {{ .Values.airflow.image.repository }}:{{ .Values.airflow.image.tag }}
         imagePullPolicy: {{ .Values.airflow.image.pull_policy }}
+        command:
+          - "airflow"
         args: ["scheduler"]
         envFrom:
         - secretRef:
