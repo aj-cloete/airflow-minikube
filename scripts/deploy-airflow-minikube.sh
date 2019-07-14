@@ -18,6 +18,9 @@ fi
 kubectl apply -f $BASEDIR/../airflow/tiller.yaml
 helm dependency update $BASEDIR/../airflow
 
+cat $BASEDIR/../docker/build_docker.sh
+
+exit 0
 if [[ ! $(docker images | grep airflow) ]]; then
   sh $BASEDIR/../docker/build_docker.sh;
 fi
