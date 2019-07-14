@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BASEDIR=$(dirname "$0")
+_MY_SCRIPT="${BASH_SOURCE[0]}"
+BASEDIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
 
 # Start the minikube cluster
 /bin/bash $BASEDIR/start_minikube.sh;

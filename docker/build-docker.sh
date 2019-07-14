@@ -1,7 +1,8 @@
 #!/bin/bash
 # This script builds the airflow docker image from this folder
+_MY_SCRIPT="${BASH_SOURCE[0]}"
+BASEDIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
 
-BASEDIR=$(dirname "$0")
 cd $BASEDIR
 
 IMAGE=${1:-airflow}
