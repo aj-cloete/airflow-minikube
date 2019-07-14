@@ -43,6 +43,9 @@ case "${_UNAME_OUT}" in
     Linux*)
       _MY_OS=linux
       _VM_DRIVER=none
+      if [[ ! -x /usr/bin/socat ]]; then
+        sudo apt-get install -y socat
+      fi
     ;;
     Darwin*)
       _MY_OS=darwin
