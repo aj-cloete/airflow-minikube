@@ -25,8 +25,17 @@ if [[ ! -x /usr/local/bin/minikube ]]; then
   exit 0
 fi
 
-sudo minikube status
+_UNAME_OUT=$(uname -s)
+case "${_UNAME_OUT}" in
+    Linux*)
+      _MINIKUBE="sudo minikube"
+    ;;
+    Darwin*)
+      _MINIKUBE="minikube"
+    ;;
+
+$_MINIKUBE status
 if [[ $? = 0 ]]; then
-  sudo minikube delete
+  $_MINIKUBE delete
   sudo rm -rf HOME/.kube $HOME/.minikube
 fi
