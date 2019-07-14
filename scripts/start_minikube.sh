@@ -104,11 +104,12 @@ echo "your path is ${PATH}"
 case "${_MY_OS}" in
   linux*)
     _MINIKUBE="sudo -E PATH=$PATH minikube"
-    _MEM=free -m | grep Mem | awk '{print $2}'
+    _MEM=$(free -m | grep Mem | awk '{print $2}')
     ;;
   *)
-    _MINIKUBE="PATH=$PATH minikube";;
+    _MINIKUBE="PATH=$PATH minikube"
     _MEM=4096
+    ;;
 esac
 
 if [[ ! $($_MINIKUBE status | grep "Correctly Configured") ]]; then
