@@ -1,4 +1,7 @@
 #!/bin/bash
+# This script deploys the airflow kubernetes setup to kubernetes
+
+set -x
 
 _MY_SCRIPT="${BASH_SOURCE[0]}"
 BASEDIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
@@ -20,9 +23,7 @@ kubectl apply -f $BASEDIR/../airflow/tiller.yaml
 helm dependency update $BASEDIR/../airflow
 
 if [[ ! $(docker images | grep airflow) ]]; then
-  cd $BASEDIR/../docker
-  ./airflow-docker-build.sh
-  cd $BASEDIR
+  /bin/bash $BASEDIR/../docker/build-docker.sh
 fi
 
 helm upgrade --install airflow $BASEDIR/../airflow/. --namespace=airflow
