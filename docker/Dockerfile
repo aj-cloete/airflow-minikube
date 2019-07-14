@@ -50,6 +50,7 @@ slack,\
 ssh'\
     && pip install -U pip setuptools wheel \
     && pip install \
+        "psycopg2-binary>=2.7.4" \
         "flask>=1.0,<1.1" \
         "boto3" \
         "zdesk" \
