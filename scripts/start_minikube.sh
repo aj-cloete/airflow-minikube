@@ -100,13 +100,16 @@ echo "your path is ${PATH}"
 
 case "${_MY_OS}" in
   linux*)
-    _MINIKUBE="sudo -E PATH=$PATH minikube";;
+    _MINIKUBE="sudo -E PATH=$PATH minikube"
+    _MEM=free -m | grep Mem | awk '{print $2}'
+    ;;
   *)
     _MINIKUBE="PATH=$PATH minikube";;
+    _MEM=4096
 esac
 
 if [[ ! $($_MINIKUBE status | grep "Correctly Configured") ]]; then
-  $_MINIKUBE start --kubernetes-version=${_KUBERNETES_VERSION} --vm-driver=${_VM_DRIVER}
+  $_MINIKUBE start --memory ${_MEM} --kubernetes-version=${_KUBERNETES_VERSION} --vm-driver=${_VM_DRIVER}
   $_MINIKUBE update-context; else
   $_MINIKUBE status;
 fi
