@@ -107,7 +107,7 @@ case "${_MY_OS}" in
     _MEM=$(free -m | grep Mem | awk '{print $2}')
     ;;
   *)
-    _MINIKUBE="PATH=$PATH minikube"
+    _MINIKUBE="minikube"
     _MEM=4096
     ;;
 esac

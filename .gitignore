@@ -3,4 +3,5 @@ Pipfile
 Pipfile.lock
 airflow/charts
 airflow/charts/*
+airflow/values.yaml
 *.ipynb*
