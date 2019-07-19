@@ -21,7 +21,7 @@
 
 set -ex
 
-if [[ -x /usr/local/bin/minikube ]]; then
+if [[ $(which minikube) ]]; then
   echo Minikube already installed
   if [[ $(minikube status | grep "Correctly Configured") ]]; then
     echo Minikube already up and running!
