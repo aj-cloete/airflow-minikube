@@ -46,15 +46,28 @@ case "${_UNAME_OUT}" in
       if [[ ! -x /usr/bin/socat ]]; then
         sudo apt-get install -y socat
       fi
+      if [[ ! $(which docker) ]]; then
+        echo Downloading docker which is a requirement for using minikube.
+        cd $_MY_DIR/bin
+        curl -fsSl https://get.docker.com -Lo get-docker.sh
+        sudo sh get-docker.sh
+        sudo usermod -aG docker $USER || :
+        cd $_MY_DIR
+      fi
+
     ;;
     Darwin*)
       _MY_OS=darwin
       if [[ ! $(which brew) ]]; then
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
-      unset _VM_DRIVER
-      if [[ ! -x /usr/bin/virtualbox ]]; then
+      if [[ ! $(which virtualbox) ]]; then
         brew cask install virtualbox
+      fi
+      _VM_DRIVER=virtualbox
+      if [[ ! $(which docker) ]]; then
+        echo Downloading docker which is a requirement for using minikube.
+        brew cask install docker
       fi
     ;;
     *)
@@ -91,15 +104,6 @@ if [[ ! -x /usr/local/bin/minikube ]]; then
     https://storage.googleapis.com/minikube/releases/latest/minikube-${_MY_OS}-amd64
   chmod +x bin/minikube
   sudo mv bin/minikube /usr/local/bin/minikube
-fi
-
-if [[ ! $(which docker) ]]; then
-  echo Downloading docker which is a requirement for using minikube.
-  cd $_MY_DIR/bin
-  curl -fsSl https://get.docker.com -Lo get-docker.sh
-  sudo sh get-docker.sh
-  sudo usermod -aG docker $USER || :
-  cd $_MY_DIR
 fi
 
 rm -rf bin
