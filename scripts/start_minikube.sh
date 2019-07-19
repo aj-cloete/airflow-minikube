@@ -87,7 +87,7 @@ case "${_UNAME_OUT}" in
       if [[ ! $(which docker) ]]; then
         echo Downloading docker which is a requirement for using minikube.
         brew cask reinstall docker;
-        open -a /Applications/Docker;
+        open -a /Applications/Docker.app --background;
         echo Please sign in to the Docker app to continue
         while ! docker system info > /dev/null 2>&1; 
           do sleep 1;
