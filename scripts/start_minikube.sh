@@ -53,6 +53,25 @@ case "${_UNAME_OUT}" in
         sudo sh get-docker.sh
         sudo usermod -aG docker $USER || :
         cd $_MY_DIR
+        echo Waiting for docker to be ready...
+        while ! docker system info > /dev/null 2>&1; do 
+          sleep 1; 
+        done
+        echo Done!
+      fi
+      if [[ ! $(which minikube) ]]; then
+        echo Downloading minikube.
+        curl -Lo bin/minikube  \
+          https://storage.googleapis.com/minikube/releases/latest/minikube-${_MY_OS}-amd64
+        chmod +x bin/minikube
+        sudo mv bin/minikube /usr/local/bin/minikube
+      fi
+      if [[ ! $(which kubectl) ]]; then
+        echo Downloading kubectl, which is a requirement for using minikube.
+        curl -Lo bin/kubectl  \
+          https://storage.googleapis.com/kubernetes-release/release/${_KUBERNETES_VERSION}/bin/${_MY_OS}/amd64/kubectl
+        chmod +x bin/kubectl
+        sudo mv bin/kubectl /usr/local/bin/kubectl
       fi
 
     ;;
@@ -62,13 +81,28 @@ case "${_UNAME_OUT}" in
         /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
       if [[ ! $(which virtualbox) ]]; then
-        brew cask install virtualbox
+        brew cask reinstall virtualbox;
       fi
       _VM_DRIVER=virtualbox
       if [[ ! $(which docker) ]]; then
         echo Downloading docker which is a requirement for using minikube.
-        brew cask install docker
+        brew cask reinstall docker;
+        open -a /Applications/Docker;
+        echo Please sign in to the Docker app to continue
+        while ! docker system info > /dev/null 2>&1; 
+          do sleep 1;
+        done
+        echo Docker is ready!
       fi
+      if [[ ! $(which minikube) ]]; then
+        echo Installing minikube
+        brew cask reinstall minikube;
+      fi
+      if [[ ! $(which kubectl) ]]; then
+        echo Installing kubectl
+        brew reinstall kubernetes-cli;
+      fi
+
     ;;
     *)
       echo "${_UNAME_OUT} is unsupported."
@@ -89,21 +123,6 @@ mkdir -p bin
 
 if [[ ! -d /usr/local/bin ]]; then
     sudo mkdir -p /usr/local/bin
-fi
-
-if [[ ! -x /usr/local/bin/kubectl ]]; then
-  echo Downloading kubectl, which is a requirement for using minikube.
-  curl -Lo bin/kubectl  \
-    https://storage.googleapis.com/kubernetes-release/release/${_KUBERNETES_VERSION}/bin/${_MY_OS}/amd64/kubectl
-  chmod +x bin/kubectl
-  sudo mv bin/kubectl /usr/local/bin/kubectl
-fi
-if [[ ! -x /usr/local/bin/minikube ]]; then
-  echo Downloading minikube.
-  curl -Lo bin/minikube  \
-    https://storage.googleapis.com/minikube/releases/latest/minikube-${_MY_OS}-amd64
-  chmod +x bin/minikube
-  sudo mv bin/minikube /usr/local/bin/minikube
 fi
 
 rm -rf bin
@@ -147,3 +166,4 @@ kubectl get -n kube-system pods
    exit 1)
 k8s_single_pod_ready -n kube-system -l k8s-app=kube-dns
 k8s_single_pod_ready -n kube-system storage-provisioner
+
