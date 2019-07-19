@@ -33,9 +33,9 @@ case "${_UNAME_OUT}" in
     Darwin*)
       _MINIKUBE="minikube"
     ;;
+esac
 
-$_MINIKUBE status
-if [[ $? = 0 ]]; then
+if [[ $($_MINIKUBE status) ]]; then
   $_MINIKUBE delete
   sudo rm -rf HOME/.kube $HOME/.minikube
 fi
