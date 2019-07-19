@@ -49,7 +49,13 @@ case "${_UNAME_OUT}" in
     ;;
     Darwin*)
       _MY_OS=darwin
+      if [[ ! $(which brew) ]]; then
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      fi
       unset _VM_DRIVER
+      if [[ ! -x /usr/bin/virtualbox ]]; then
+        brew cask install virtualbox
+      fi
     ;;
     *)
       echo "${_UNAME_OUT} is unsupported."
