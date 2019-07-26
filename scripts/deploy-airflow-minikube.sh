@@ -9,6 +9,9 @@ BASEDIR=$(cd "$(dirname "$_MY_SCRIPT")" && pwd)
 # Start the minikube cluster
 /bin/bash $BASEDIR/start_minikube.sh;
 
+# Ensure that the current deployment of airflow is fully removed
+/bin/bash $BASEDIR/helm_delete_airflow.sh;
+
 if [[ ! $(which helm) ]]; then
   echo Installing helm which is required for deploying to kubernetes
   if [[ $(which brew) ]]; then
@@ -26,6 +29,8 @@ helm init --service-account tiller --upgrade --wait
 helm dependency update $BASEDIR/../airflow
 
 if [[ ! $(docker images | grep airflow) ]]; then
+  # Ensure we're using the minikube docker local repo
+  eval $(minikube docker-env)
   /bin/bash $BASEDIR/../docker/build-docker.sh
 fi
 

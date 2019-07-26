@@ -5,3 +5,4 @@ airflow/charts
 airflow/charts/*
 airflow/values.yaml
 *.ipynb*
+*.DS_Store*

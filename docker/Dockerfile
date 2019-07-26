@@ -18,6 +18,7 @@ ARG PYTHON_DEPS=""
 # Apt dependencies
 RUN set -x \
     && buildDeps=' \
+        apt-utils \
         libssl-dev \
         libpq-dev \
         python-dev \
@@ -52,16 +53,19 @@ ssh'\
     && pip install \
         "psycopg2-binary>=2.7.4" \
         "flask>=1.0,<1.1" \
+        "tzlocal>=1.5.0.0,<2.0.0.0" \
         "boto3" \
         "zdesk" \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && pip install apache-airflow[$airflowDeps${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
 
-# Check for requirements file and install if exists
 COPY . /buildcontext/.
+RUN cp /buildcontext/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Check for requirements file and install if exists
 RUN if [ -f /buildcontext/requirements.txt ]; \
     then pip install -r /buildcontext/requirements.txt; fi \
-    && rm -rf /buildcontext \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
@@ -71,12 +75,17 @@ RUN if [ -f /buildcontext/requirements.txt ]; \
         /var/tmp/* \
         /usr/share/man \
         /usr/share/doc \
-        /usr/share/doc-base  
+        /usr/share/doc-base \
+    && rm -rf /buildcontext
 
 # COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+
+EXPOSE 8080
 
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 
 WORKDIR ${AIRFLOW_HOME}
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 CMD [ "bash" ]
