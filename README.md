@@ -2,6 +2,11 @@
 Airflow natively on minikube (services and executors)
 
 ## Quick deploy
+- Step 1: Make a copy of *values.template.yaml* file in the *airflow* folder and edit it to the desired state.  Save this file within the *airflow* folder as *values.yaml*.  This configures your airflow deploy. 
+  - `cp ./airflow/values.template.yaml ./airflow/values.yaml`
+  - `nano ./airflow/values.yaml`
+  While the default settings will work, you should really look into the configuration you need and customize the deployment.
+- Step 2: 
 Run `./scripts/deploy-airflow-minikube.sh`
 
 ### Notes:
