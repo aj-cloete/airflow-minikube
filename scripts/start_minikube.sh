@@ -25,6 +25,7 @@ if [[ $(which minikube) ]]; then
   echo Minikube already installed
   if [[ $(minikube status | grep "Correctly Configured") ]]; then
     echo Minikube already up and running!
+    eval $(minikube docker-env)
     exit 0
   fi
 fi

@@ -12,6 +12,10 @@ helm dependency update $BASEDIR/../airflow
 if [[ ! $(docker images | grep airflow) ]]; then
   /bin/bash $BASEDIR/../docker/build-docker.sh
 fi
+
+# Ensure we're using the minikube docker local repo
+eval $(minikube docker-env)
+
 helm upgrade --install airflow $BASEDIR/../airflow/. --namespace=airflow
 kubectl config set-context --current --namespace=airflow
 

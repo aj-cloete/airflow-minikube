@@ -23,14 +23,15 @@ if [[ ! $(which helm) ]]; then
   fi
 fi
 
+# Ensure we're using the minikube docker local repo
+eval $(minikube docker-env)
+
 # Apply the tiller service account on the minikube cluster
 kubectl apply -f $BASEDIR/../airflow/tiller.yaml
 helm init --service-account tiller --upgrade --wait
 helm dependency update $BASEDIR/../airflow
 
 if [[ ! $(docker images | grep airflow) ]]; then
-  # Ensure we're using the minikube docker local repo
-  eval $(minikube docker-env)
   /bin/bash $BASEDIR/../docker/build-docker.sh
 fi
 
