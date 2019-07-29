@@ -1,9 +1,9 @@
-.env*
-Pipfile
-Pipfile.lock
-airflow/charts
-airflow/charts/*
-airflow/values.yaml
+*.env*
+*Pipfile
+*Pipfile.lock
+*airflow/charts
+*airflow/charts/*
+*airflow/values.yaml
 *.ipynb*
 *.DS_Store*
 *conf.txt*
