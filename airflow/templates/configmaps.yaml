@@ -99,7 +99,6 @@ metadata:
 data:
   airflow.cfg: |
     [core]
-    airflow_home = /usr/local/airflow
     {{- if .Values.airflow.dags.persistence.enabled }}
     dags_folder = /usr/local/airflow/dags
     {{- else }}
@@ -167,7 +166,7 @@ data:
 
     [cli]
     api_client = airflow.api.client.json_client
-    endpoint_url = https://airflow.crunchanalytics.cloud
+    endpoint_url = http://localhost:8080
 
     [api]
     auth_backend = airflow.api.auth.backend.default
