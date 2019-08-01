@@ -44,6 +44,16 @@ if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
   wait_for_port "Postgres" "$POSTGRES_HOST" "$POSTGRES_PORT"
 fi
 
+if [ ! -z "$SQL_DESTINATION" ]; then
+  echo "Pulling from repo cloned to ${SQL_DESTINATION}"
+  cd $SQL_DESTINATION && git pull --depth 1 >/dev/null 2>/dev/null && cd $AIRFLOW_HOME
+fi
+
+if [ ! -z "$DAGS_DESTINATION" ]; then
+  echo "Pulling from repo cloned to ${DAGS_DESTINATION}"
+  cd $DAGS_DESTINATION && git pull --depth 1 >/dev/null 2>/dev/null && cd $AIRFLOW_HOME
+fi
+
 case "$1" in
   webserver)
     airflow initdb
