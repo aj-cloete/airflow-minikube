@@ -10,7 +10,7 @@ ENV PYTHONUTF8=1
 ENV PYTHONIOENCODING=utf-8
 
 # Airflow
-ARG AIRFLOW_VERSION=1.10.3
+ARG AIRFLOW_VERSION=1.10.4
 ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
@@ -52,6 +52,7 @@ emr,\
 hive,\
 kubernetes,\
 mysql,\
+postgres,\
 s3,\
 salesforce,\
 segment,\
@@ -59,10 +60,8 @@ slack,\
 ssh'\
     && pip install -U pip setuptools wheel \
     && pip install \
-        "psycopg2-binary>=2.7.4" \
-        "flask>=1.0,<1.1" \
-        "tzlocal>=1.5.0.0,<2.0.0.0" \
         "boto3" \
+        "websocket-client<0.55.0" \
         "zdesk" \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && pip install apache-airflow[$airflowDeps${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
@@ -94,6 +93,8 @@ EXPOSE 8080
 RUN set -x \
   && if [ -n "${DAGS_GIT_CLONE_COMMAND}" ]; then $DAGS_GIT_CLONE_COMMAND $DAGS_DESTINATION; fi \
   && if [ -n "${SQL_GIT_CLONE_COMMAND}" ]; then $SQL_GIT_CLONE_COMMAND $SQL_DESTINATION; fi
+
+RUN airflow initdb
 
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 ENV DAGS_DESTINATION=${DAGS_DESTINATION}
