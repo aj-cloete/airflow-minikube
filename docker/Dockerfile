@@ -55,7 +55,7 @@ RUN set -x \
       stable" \
     && apt-get update \
     && apt-get -y install docker-ce \
-    && rm -rf /var/lib/apt/lists/*  
+    && rm -rf /var/lib/apt/lists/*
 
 # Airflow installation
 RUN airflowDeps='crypto,\
