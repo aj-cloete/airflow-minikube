@@ -58,7 +58,9 @@ RUN set -x \
     && rm -rf /var/lib/apt/lists/*
 
 # Airflow installation
-RUN airflowDeps='crypto,\
+RUN airflowDeps='\
+crypto,\
+docker,\
 emr,\
 hive,\
 kubernetes,\
