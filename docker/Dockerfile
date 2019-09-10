@@ -44,6 +44,7 @@ RUN set -x \
         git \
         zip \
         unzip \
+        docker-ce \
     && rm -rf /var/lib/apt/lists/*
 
 # Airflow installation
