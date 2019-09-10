@@ -10,7 +10,7 @@ ENV PYTHONUTF8=1
 ENV PYTHONIOENCODING=utf-8
 
 # Airflow
-ARG AIRFLOW_VERSION=1.10.4
+ARG AIRFLOW_VERSION=1.10.5
 ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
@@ -34,6 +34,10 @@ RUN set -x \
         bind9utils \
         default-libmysqlclient-dev \
         gcc \
+        apt-transport-https \
+        ca-certificates \
+        gnupg2 \
+        software-properties-common \
     ' \
     && apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
@@ -44,8 +48,14 @@ RUN set -x \
         git \
         zip \
         unzip \
-        docker-ce \
-    && rm -rf /var/lib/apt/lists/*
+    && curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey \
+    && add-apt-repository \
+      "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+      $(lsb_release -cs) \
+      stable" \
+    && apt-get update \
+    && apt-get -y install docker-ce \
+    && rm -rf /var/lib/apt/lists/*  
 
 # Airflow installation
 RUN airflowDeps='crypto,\
