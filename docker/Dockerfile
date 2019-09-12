@@ -65,7 +65,6 @@ emr,\
 hive,\
 kubernetes,\
 mysql,\
-postgres,\
 s3,\
 salesforce,\
 segment,\
@@ -76,6 +75,7 @@ ssh'\
         "boto3" \
         "websocket-client<0.55.0" \
         "zdesk" \
+        "psycopg2-binary" \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && pip install apache-airflow[$airflowDeps${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
 
